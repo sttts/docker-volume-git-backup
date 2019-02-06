@@ -19,7 +19,7 @@ do
     fi
 
     # set up watches:
-    inotifywait -e modify $WATCH_FILE
+    inotifywait -e modify -e delete -e create $WATCH_FILE
 
     # commit all files from current dir:
     git add --all .
