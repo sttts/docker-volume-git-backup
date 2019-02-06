@@ -6,7 +6,7 @@ first=true
 
 while true
 do
-    if [ ! -f $WATCH_FILE ]; then
+    if [ ! -x $WATCH_FILE ]; then
         if $first; then
             printf "$WATCH_FILE does not exist (yet ?).."
             first=0
