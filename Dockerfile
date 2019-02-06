@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM __BASEIMAGE_ARCH__/debian:stretch
 
 MAINTAINER fvanderbiest "francois.vanderbiest@gmail.com"
 
