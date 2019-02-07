@@ -46,6 +46,7 @@ To push to a repository, these additional variables are required:
 Optional environment:
  * `REMOTE_BRANCH`: Remote branch to use. Defaults to master.
  * `FORCE_CLONE`: Delete volume content before cloning remote repository
+ * `REPO_DIR`: The target directory where the repository is checked out. This defaults to `/var/local/data`.
 
 To use SSH authentication to access remote repository, one of following
 variables must be set:

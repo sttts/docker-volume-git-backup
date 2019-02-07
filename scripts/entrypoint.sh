@@ -1,5 +1,7 @@
 #!/bin/bash
 
+REPO_DIR=${REPO_DIR:-$PWD}
+
 # set name and email to use for commits made by this container
 git config --global user.email "$GIT_EMAIL"
 git config --global user.name "$GIT_USERNAME"
@@ -23,31 +25,34 @@ if [ -n "$REMOTE_NAME" ]  && [ -n "$REMOTE_URL" ]; then
 fi
 
 # test if local git repo already exists, if not clone or init
-if [ ! -d .git ]; then
+if [ ! -d $REPO_DIR/.git ]; then
 
   # clone remote repo if defined
   if [ -n "$REMOTE_NAME" ] && [ -n "$REMOTE_URL" ]; then
 
     # check if there is something in directory
-    files_count=`ls -a | wc -l`
+    files_count=`ls -a $REPO_DIR | wc -l`
     if [ $files_count -gt 2 ]; then
       if [ -n "$FORCE_CLONE" ] && [ $FORCE_CLONE = "yes" ]; then
-        rm -fr ./*
-        rm -fr ./.*
+        rm -fr $REPO_DIR/*
+        rm -fr $REPO_DIR/.*
       else
         echo "Directory not empty and FORCE_CLONE not set so stopping"
         exit 1
       fi
     fi
 
-    echo "Cloning from $REMOTE_URL"
-    git clone -b $REMOTE_BRANCH $REMOTE_URL .
-
+    echo "Cloning from $REMOTE_URL into $REPO_DIR"
+    git clone -b $REMOTE_BRANCH $REMOTE_URL $REPO_DIR
+    cd $REPO_DIR
   else
     echo "No remote configured, just init"
+    mkdir -p $REPO_DIR
+    cd $REPO_DIR
     git init
   fi
-
+else
+  cd $REPO_DIR
 fi
 
 # Fetch last commits of remote repo if defined
