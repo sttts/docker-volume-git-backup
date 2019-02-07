@@ -19,14 +19,14 @@ do
     fi
 
     # set up watches:
-    inotifywait -e modify -e delete -e create $WATCH_FILE
+    inotifywait -e modify -e delete -e create -t ${RECONCILE_SECONDS:-300} $WATCH_FILE
 
     # commit all files from current dir:
     git add --all .
 
     # commit with custom message:
     msg=`eval $GIT_COMMIT_MESSAGE`
-    git commit -m "${msg:-"no commit message"}"
+    git commit -m "${msg:-"no commit message"}" || continue
 
     if [ $REMOTE_NAME ] && [ $REMOTE_URL ]; then
         # push to repository in the background
