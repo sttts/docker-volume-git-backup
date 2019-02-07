@@ -47,6 +47,7 @@ Optional environment:
  * `REMOTE_BRANCH`: Remote branch to use. Defaults to master.
  * `FORCE_CLONE`: Delete volume content before cloning remote repository
  * `REPO_DIR`: The target directory where the repository is checked out. This defaults to `/var/local/data`.
+ * `REPO_DIR_PERMISSIONS`: Permissions to set on a newly created REPO_DIR, e.g. `755`.
  * `RECONCILE_SECONDS`: Seconds after which the current state is pushed, in case a change event was missed. Default to 300s, can be disabled by setting it to `0`.
 
 To use SSH authentication to access remote repository, one of following

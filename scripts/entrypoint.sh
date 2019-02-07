@@ -51,6 +51,9 @@ if [ ! -d $REPO_DIR/.git ]; then
     cd $REPO_DIR
     git init
   fi
+  if [ -n "$REPO_DIR_PERMISSIONS" ]; then
+    chmod $REPO_DIR_PERMISSIONS $REPO_DIR
+  fi
 else
   cd $REPO_DIR
 fi
