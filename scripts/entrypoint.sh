@@ -31,13 +31,14 @@ if [ ! -d $REPO_DIR/.git ]; then
   if [ -n "$REMOTE_NAME" ] && [ -n "$REMOTE_URL" ]; then
 
     # check if there is something in directory
-    files_count=`ls -a $REPO_DIR | wc -l`
+    files_count=`ls -1a $REPO_DIR | wc -l`
     if [ $files_count -gt 2 ]; then
       if [ -n "$FORCE_CLONE" ] && [ $FORCE_CLONE = "yes" ]; then
         rm -fr $REPO_DIR/*
         rm -fr $REPO_DIR/.*
       else
-        echo "Directory not empty and FORCE_CLONE not set so stopping"
+        echo "Directory not empty and FORCE_CLONE not set so stopping:"
+        ls -l $REPO_DIR
         exit 1
       fi
     fi
