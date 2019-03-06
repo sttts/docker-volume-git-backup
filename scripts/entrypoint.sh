@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 REPO_DIR=${REPO_DIR:-$PWD}
 
