@@ -14,5 +14,7 @@ WORKDIR /var/local/data
 
 ENV REMOTE_BRANCH master
 
+RUN groupadd -r -g 1001 git && useradd -r -u 1001 -g git git && mkdir -p /home/git && chown git.git /home/git
+
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD ["bash", "-l", "/run.sh"]
