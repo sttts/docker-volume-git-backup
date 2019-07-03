@@ -68,9 +68,12 @@ if [ -n "$REMOTE_NAME" ] && [ -n "$REMOTE_URL" ]; then
 
   echo "Fetch remote repo"
   git fetch $REMOTE_NAME
-  echo "Reset to upstream state"
-  git reset --hard $REMOTE_NAME/$REMOTE_BRANCH
-  git clean -xdf
+
+  if [ $(git rev-parse HEAD) != $(git rev-parse $REMOTE_NAME/$REMOTE_BRANCH) ]; then
+      echo "Reset to upstream state"
+      git reset --hard $REMOTE_NAME/$REMOTE_BRANCH
+      git clean -xdf
+  fi
 fi
 
 # execute CMD
