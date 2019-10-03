@@ -44,7 +44,7 @@ if [ ! -d $REPO_DIR/.git ]; then
     fi
 
     echo "Cloning from $REMOTE_URL into $REPO_DIR"
-    git clone -b $REMOTE_BRANCH $REMOTE_URL $REPO_DIR
+    git clone -b $REMOTE_BRANCH --depth=1 --progress $REMOTE_URL $REPO_DIR
     cd $REPO_DIR
   else
     echo "No remote configured, just init"
