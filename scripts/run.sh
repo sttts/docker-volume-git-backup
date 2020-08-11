@@ -24,6 +24,12 @@ do
     # commit all files from current dir:
     git add --all .
 
+    SIZE=$(stat -c '%s' userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json || echo 0)
+    if [ "${SIZE}" -le 1000 ]; then
+        touch /tmp/unhealthy
+        continue
+    fi
+
     # commit with custom message:
     msg=`eval $GIT_COMMIT_MESSAGE`
     git commit -m "${msg:-"no commit message"}" || continue
