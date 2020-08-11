@@ -27,25 +27,22 @@ do
     done
     echo
 
-    set -x
     THINGS=userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json
-
     SIZE=$(stat -c '%s' ${THINGS} || echo 0)
     if [ "${SIZE}" -le 1000 ]; then
         if [ -f ${NOTICED} ]; then
-          echo "Resetting ${THINGS}"
+          echo "Resetting ${THINGS} and removing ${NOTICED}"
           git checkout HEAD ${THINGS}
           rm -f ${NOTICED}
         else
           echo "Waiting for OpenHAB to notice empty things"
         fi
-        set +x
         sleep 10
         continue
     else
+        echo "Removing orphan ${NOTICED}"
         rm -f ${NOTICED}
     fi
-    set +x
 
     # commit all files from current dir:
     git add --all .
