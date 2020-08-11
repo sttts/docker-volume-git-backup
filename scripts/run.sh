@@ -21,14 +21,22 @@ do
     # set up watches:
     inotifywait -e modify -e delete -e create -t ${RECONCILE_SECONDS:-300} $WATCH_FILE
 
-    # commit all files from current dir:
-    git add --all .
-
-    SIZE=$(stat -c '%s' userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json || echo 0)
+    THINGS=userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json
+    NOTICED=userdata/jsondb/empty-things-noticed
+    SIZE=$(stat -c '%s' ${THINGS} || echo 0)
     if [ "${SIZE}" -le 1000 ]; then
-        touch /tmp/unhealthy
+        if [ -f ${NOTICED} ]; then
+          echo "Resetting ${THINGS}"
+          rm -f ${NOTICED}
+          git checkout HEAD ${THINGS}
+        else
+          echo "Waiting for OpenHAB to notice empty things"
+        fi
         continue
     fi
+
+    # commit all files from current dir:
+    git add --all .
 
     # commit with custom message:
     msg=`eval $GIT_COMMIT_MESSAGE`
