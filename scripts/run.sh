@@ -18,22 +18,34 @@ do
         echo "$WATCH_FILE exists"
     fi
 
-    # set up watches:
-    inotifywait -e modify -e delete -e create -t ${RECONCILE_SECONDS:-300} $WATCH_FILE
-
-    THINGS=userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json
     NOTICED=userdata/jsondb/empty-things-noticed
+
+    # inotifywait -r -e modify -e delete -e create -t ${RECONCILE_SECONDS:-300} $WATCH_FILE
+    while git diff HEAD --exit-code &>/dev/null && ! test -f ${NOTICED}; do
+        sleep 10
+        echo -n "."
+    done
+    echo
+
+    set -x
+    THINGS=userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json
+
     SIZE=$(stat -c '%s' ${THINGS} || echo 0)
     if [ "${SIZE}" -le 1000 ]; then
         if [ -f ${NOTICED} ]; then
           echo "Resetting ${THINGS}"
-          rm -f ${NOTICED}
           git checkout HEAD ${THINGS}
+          rm -f ${NOTICED}
         else
           echo "Waiting for OpenHAB to notice empty things"
         fi
+        set +x
+        sleep 10
         continue
+    else
+        rm -f ${NOTICED}
     fi
+    set +x
 
     # commit all files from current dir:
     git add --all .
