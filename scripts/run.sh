@@ -27,11 +27,15 @@ do
     done
     echo
 
+    # commit all files from current dir:
+    git add --all .
+
     THINGS=userdata/jsondb/org.eclipse.smarthome.core.thing.Thing.json
     SIZE=$(stat -c '%s' ${THINGS} || echo 0)
     if [ "${SIZE}" -le 1000 ]; then
         if [ -f ${NOTICED} ]; then
           echo "Resetting ${THINGS} and removing ${NOTICED}"
+          git reset
           git checkout HEAD ${THINGS}
           rm -f ${NOTICED}
         else
@@ -43,9 +47,6 @@ do
         echo "Removing orphan ${NOTICED}"
         rm -f ${NOTICED}
     fi
-
-    # commit all files from current dir:
-    git add --all .
 
     # commit with custom message:
     msg=`eval $GIT_COMMIT_MESSAGE`
