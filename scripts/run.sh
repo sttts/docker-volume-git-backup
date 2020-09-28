@@ -18,6 +18,10 @@ do
         echo "$WATCH_FILE exists"
     fi
 
+    if [ -f .git/index.lock ]; then
+	rm -f .git/index.lock
+    fi
+
     NOTICED=userdata/jsondb/empty-things-noticed
 
     # inotifywait -r -e modify -e delete -e create -t ${RECONCILE_SECONDS:-300} $WATCH_FILE
@@ -54,6 +58,6 @@ do
 
     if [ $REMOTE_NAME ] && [ $REMOTE_URL ]; then
         # push to repository in the background
-        git push $REMOTE_NAME $REMOTE_BRANCH &
+        git push $REMOTE_NAME $REMOTE_BRANCH
     fi
 done
